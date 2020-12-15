@@ -3,8 +3,8 @@ vitaliygut Infra repository
 
 HW3
 =========================================
-bastion = 178.154.227.202
-someinternalhost = 10.130.0.14
+bastion_IP = 178.154.227.202
+someinternalhost_IP = 10.130.0.14
 
 Cпособ подключения к someinternalhost в одну команду
 
