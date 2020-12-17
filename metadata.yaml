@@ -5,10 +5,8 @@ users:
     shell: /bin/bash
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     ssh-authorized-keys:
-
-cloud_final_modules:
-- [scripts-user, always]
-Content-Type: text/x-shellscript; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment; filename="userdata.txt"
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM+seMwfjq2y0jULQHRT51qaPSd2oXSdPuQ5PpP62TiP
+runcmd:
+  - wget -nv https://raw.githubusercontent.com/Otus-DevOps-2020-11/vitaliygut_infra/cloud-testapp/install_ruby.sh  && bash  install_ruby.sh; rm -f install_ruby.sh
+  - wget -nv https://raw.githubusercontent.com/Otus-DevOps-2020-11/vitaliygut_infra/cloud-testapp/install_mongodb.sh  && bash  install_mongodb.sh; rm -f install_mongodb.sh
+  - wget -nv https://raw.githubusercontent.com/Otus-DevOps-2020-11/vitaliygut_infra/cloud-testapp/deploy.sh  && bash  deploy.sh; rm -f deploy.sh
