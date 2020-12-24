@@ -1,0 +1,14 @@
+[Unit]
+Description=Puma HTTP Server
+After=network.target
+
+[Service]
+Type=notify
+WatchdogSec=10
+User=ubuntu
+WorkingDirectory=/home/ubuntu/reddit
+ExecStart=/usr/local/bin/puma
+ExecStop=/usr/local/bin/pumactl
+Restart=always
+[Install]
+WantedBy=multi-user.target
