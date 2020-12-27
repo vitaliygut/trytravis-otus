@@ -1,0 +1,7 @@
+cloud_id = "fewfwew6e45fw6f"
+folder_id = "woefoiwejfoiwe"
+image_id = "porieofjoerijverno"
+subnet_id = "ekwehfiwefhiweuhf"
+public_key_path = "id_rsa.pub"
+service_account_key_file = "key.json"
+private_key = "id_rsa"
