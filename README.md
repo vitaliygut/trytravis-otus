@@ -68,7 +68,7 @@ variable zone {
   default     = "ru-central1-a"
   ...
   ```
-2. Определяем переменнык в terraform.tfvars
+2. Определяем переменные в terraform.tfvars
 ```
 cloud_id                 = "qaz123"
 folder_id                = "qaz456"
@@ -78,7 +78,7 @@ image_id                 = "qaz789"
 ```
 folder_id                =  var.folder_id
 ```
-Дополнительнае задание:
+Дополнительное задание:
 
 1. Создаем файл lb.tf и определяем целевую группу
 ```
@@ -92,7 +92,7 @@ resource "yandex_lb_target_group" "app" {
   }
 ```
 
-2. Нстройка балансировщика с указание цлевой группы
+2. Настройка балансировщика с указанием цлевой группы
 ```
 ...
 resource "yandex_lb_network_load_balancer" "lb" {
@@ -121,7 +121,7 @@ output "external_lb_ip_address_app" {
   value = yandex_lb_network_load_balancer.lb.listener.*.external_address_spec[0].*.address
 }
 ```
-4. Дабавление в балансировщик второй созданный сервер
+4. Добавление в балансировщик второй созданный сервер
 ```
   target {
     subnet_id = var.subnet_id
