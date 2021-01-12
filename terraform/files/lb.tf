@@ -3,12 +3,8 @@ resource "yandex_lb_target_group" "app" {
   region_id = var.region_id
 
   target {
-    subnet_id = var.subnet_id
+    subnet_id = yandex_vpc_subnet.app-subnet.id
     address   = "${yandex_compute_instance.app.0.network_interface.0.ip_address}"
-  }
-  target {
-    subnet_id = var.subnet_id
-    address   = "${yandex_compute_instance.app.1.network_interface.0.ip_address}"
   }
 
 }
