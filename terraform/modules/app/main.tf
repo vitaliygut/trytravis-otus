@@ -31,13 +31,13 @@ resource "yandex_compute_instance" "app" {
     agent       = false
     private_key = file(var.private_key)
   }
- provisioner "file" {
-    content     = templatefile("${path.module}/files/puma.service", { ip_host_db = var.ip_host_db })
-    destination = "/tmp/puma.service"
-  }
+ #provisioner "file" {
+ #   content     = templatefile("${path.module}/files/puma.service", { ip_host_db = var.ip_host_db })
+ #   destination = "/tmp/puma.service"
+ # }
 
- provisioner "remote-exec" {
-    script = "${path.module}/files/deploy.sh"
-  }
+ #provisioner "remote-exec" {
+ #   script = "${path.module}/files/deploy.sh"
+ # }
 
 }

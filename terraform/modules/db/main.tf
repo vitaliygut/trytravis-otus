@@ -31,11 +31,11 @@ resource "yandex_compute_instance" "db" {
     agent       = false
     private_key = file(var.private_key)
   }
-  provisioner "file" {
-    content     = templatefile("${path.module}/files/mongod.conf", { ip_host_db = yandex_compute_instance.db.network_interface.0.ip_address})
-    destination = "/tmp/mongod.conf"
-  }
-  provisioner "remote-exec" {
-    script = "${path.module}/files/deploy.sh"
-  }
+  #provisioner "file" {
+  #  content     = templatefile("${path.module}/files/mongod.conf", { ip_host_db = yandex_compute_instance.db.network_interface.0.ip_address})
+  #  destination = "/tmp/mongod.conf"
+  #}
+  #provisioner "remote-exec" {
+  #  script = "${path.module}/files/deploy.sh"
+  #}
 }

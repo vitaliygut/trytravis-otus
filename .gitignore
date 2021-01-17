@@ -4,3 +4,4 @@
 *.tfvars
 .terraform/
 backend.tf
+*.retry

@@ -450,3 +450,84 @@ sudo systemctl restart mongod
 ```
 terraform destroy --auto-approve; terraform apply --auto-aprove
 ```
+
+HW8
+===========================
+
+1. Устанавлием Ansible
+brew install ansible
+2. Создаем каталог ansible и файл inventory, проверяем ...
+
+```ansible appserver -i ./inventory -m ping```
+```
+...
+appserver | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+```
+3. Создаем файл inventory.yml
+
+```
+---
+app:
+  hosts:
+    appserver:
+      ansible_host:
+        84.201.131.179
+db:
+  hosts:
+    dbserver:
+      ansible_host:
+        84.201.128.39
+```
+
+4. Дабавляем clone.yml
+
+```
+---
+- name: Clone
+  hosts: app
+  tasks:
+    - name: Clone repo
+      git:
+        repo: https://github.com/express42/reddit.git
+        dest: /home/ubuntu/reddit
+```
+
+5. После запуска плейбука на сервере нет измененного состояния, так при создании окружения тераформом мы уже скачали этот репозиторий
+```appserver                  : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0```
+6. Выполняем команду ```ansible app -m command -a 'rm -rf ~/reddit'``` - папка с приложением удалена, повторный запуск плейбука clone.yml приведет к загрузки приложения из репозитария.
+
+HW9
+===========================
+Задание с ⭐
+
+1. Дабвил outputs.tf
+```
+### The Ansible inventory file
+resource "local_file" "AnsibleInventory" {
+ content = templatefile("inventory.tmpl",
+ {
+  app-ext-ip = module.app.external_ip_address_app,
+  db-ext-ip = module.db.external_ip_address_db,
+  db-int-ip = module.db.internal_ip_address_db
+ }
+ )
+ filename = "../../ansible/inventory.ini"
+}
+```
+и шаблон для формирования файла inventory.tmpl
+```
+[db]
+dbserver ansible_host=${db-ext-ip}
+[app]
+appserver ansible_host=${app-ext-ip} db_host=${db-int-ip}
+```
+2.  Переменную db_host берем из inventory файла
+```
+vars:
+   db_host: "{{db_host}}"
+```

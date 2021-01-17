@@ -1,0 +1,4 @@
+[db]
+dbserver ansible_host=${db-ext-ip}
+[app]
+appserver ansible_host=${app-ext-ip} db_host=${db-int-ip}
