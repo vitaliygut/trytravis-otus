@@ -5,3 +5,5 @@
 .terraform/
 backend.tf
 *.retry
+jdauphant.nginx
+vault.key
