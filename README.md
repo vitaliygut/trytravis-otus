@@ -531,3 +531,65 @@ appserver ansible_host=${app-ext-ip} db_host=${db-int-ip}
 vars:
    db_host: "{{db_host}}"
 ```
+
+
+HW#10 [![Build Status](https://travis-ci.com/vitaliygut/trytravis-otus.svg?branch=ansible-3)](https://travis-ci.com/vitaliygut/trytravis-otus)
+====================
+Задание с ⭐
+1. Настройка использование динамического инвентори для окружений stage и prod,
+меняем пути в terraform/stage/outputs.tf
+```
+### The Ansible inventory file
+resource "local_file" "AnsibleInventory" {
+ content = templatefile("inventory.tmpl",
+ {
+  app-ext-ip = module.app.external_ip_address_app,
+  db-ext-ip = module.db.external_ip_address_db,
+  db-int-ip = module.db.internal_ip_address_db
+ }
+ )
+ filename = "../../ansible/environments/stage/inventory.ini"
+}
+```
+для terraform/prod/outputs.tf
+```
+### The Ansible inventory file
+resource "local_file" "AnsibleInventory" {
+ content = templatefile("inventory.tmpl",
+ {
+  app-ext-ip = module.app.external_ip_address_app,
+  db-ext-ip = module.db.external_ip_address_db,
+  db-int-ip = module.db.internal_ip_address_db
+ }
+ )
+ filename = "../../ansible/environments/prod/inventory.ini"
+}
+```
+
+Задание с ⭐⭐
+
+1. Настройка TravisCI, в файле .travis.yml добовляем новую секцию для установки нужных пакетов 
+```
+install:
+  - sudo pip install ansible==2.9.17
+  - sudo pip install ansible-lint
+  - wget https://releases.hashicorp.com/terraform/0.12.5/terraform_0.12.5_linux_amd64.zip
+  - wget https://releases.hashicorp.com/packer/1.6.6/packer_1.6.6_linux_amd64.zip
+  - sudo unzip -o terraform_0.12.5_linux_amd64.zip -d /usr/local/bin/
+  - sudo unzip -o packer_1.6.6_linux_amd64.zip -d /usr/local/bin/
+  ```
+2. Для контроля состояния в файле .travis.yml добовляем секцию script
+```
+script:
+  - packer validate -var-file=packer/variables.json.example packer/app.json
+  - packer validate -var-file=packer/variables.json.example packer/db.json
+  - packer validate -var-file=packer/variables.json.example packer/immutable.json
+  - packer validate -var-file=packer/variables.json.example packer/ubuntu16.json
+  - terraform init terraform/stage
+  - terraform validate terraform/stage
+  - terraform init terraform/prod
+  - terraform validate terraform/prod
+  - tflint terraform/stage
+  - tflint terraform/prod
+  - ansible-lint ansible/playbooks/*.yml
+  ```

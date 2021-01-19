@@ -1,5 +1,6 @@
 {
-    "key_file": "key.json",
+    "key_file": "packer/key.json",
     "folder_id": "b1ghdkvjekvf9hp",
-    "source_image_family": "ubuntu-3402-lts-091545488"
+    "subnet_id": "e9bniocmjllt",
+    "source_image_family": "ubuntu-1604-lts"
 }

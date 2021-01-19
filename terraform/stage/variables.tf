@@ -40,11 +40,11 @@ variable db_disk_image {
   default     = "reddit-db-base"
 }
 variable access_key {
-  description = "access key infra-tf"
+  description = "access_key infra-tf"
 }
 variable secret_key {
-  description = "secret key infra-tf"
+  description = "secret_key infra-tf"
 }
 variable bucket_name {
-  description = "bucket name"
+  description = "bucket_name"
 }
