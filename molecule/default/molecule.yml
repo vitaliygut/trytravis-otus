@@ -2,12 +2,12 @@
 dependency:
   name: galaxy
 driver:
-  name: vagrant
-  provider:
-    name: virtualbox
+  name: docker
 platforms:
-  - name: instance
-    box: ubuntu/xenial64
+  - name: instance-travis
+    image: diodonfrost/ubuntu-16.04-ansible
+    pre_build_image: true
+    privileged: true
 provisioner:
   name: ansible
   lint:
