@@ -593,3 +593,78 @@ script:
   - tflint terraform/prod
   - ansible-lint ansible/playbooks/*.yml
   ```
+
+
+HW#11 
+=========
+Локальная разработка при помощи Vagrant
+
+Задание с ⭐
+Дополняем конфигурацию Vagrant для корректной работы проксирования приложения с помощью nginx
+
+В файле Vagrantfile добавляем секцию для проксирования приложения
+```
+....
+            ansible.extra_vars = {
+        nginx_sites: {
+          default: ['location / { proxy_pass http://127.0.0.1:9292; }']
+....
+```
+Tестирования Ansible ролей с помощю Molecule
+Самостоятельные задания:
+  тест для проверки доступности порта 27017
+Добавляем в файл  db/molecule/default/tests/test_default.py секцию для теста 
+```
+def test_mongo_socket(host):
+    host.socket("tcp://0.0.0.0:27017").is_listening
+```
+
+Задание с ⭐
+1. Вынести роль db в отдельный репозиторий
+ Создаем отдельный репозиторий для роли https://github.com/vitaliygut/ansible-role-db
+2. Подключение роли через requirements.yml обоих окружений, в ansible/environments/stage/requirements.yml и ansible/environments/prod/requirements.yml добавляем зависимости
+```
+- name: db
+  src: git@github.com:vitaliygut/ansible-role-db.git
+  scm: git
+  version: master
+```
+3. Подключаем TravisCI для созданного репозитория
+
+Меняем драйвер и образ в файле molecule.yml
+```
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: instance-travis
+    image: diodonfrost/ubuntu-16.04-ansible
+    pre_build_image: true
+    privileged: true
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+verifier:
+  name: testinfra
+```
+Cоздаем файл .travis.yml
+```
+language: python
+python: '3.6'
+services:
+- docker
+install:
+- pip install ansible>=2.4 molecule>=2.6 pytest-testinfra molecule-docker
+script:
+- molecule --version
+- ansible --version
+- molecule test
+notifications:
+  email: false
+  slack:
+    secure: foch1tvmT3QLcyNgj47EoTif/JnDtpDUAzNboVCP+sPf/Q2NP+ZNv8Xb61ZxtGcCQTEvf0tzpB2mLr/BCKy4ZsW9c9sPI3TSq95YwonmSW6V8ms0lhdl6jxxk5wD62lzKiv6G4kpaqWhBP5Eb+XgGGoU44jA3VM4RNNYOmcm4TKvgTRO9CqUSwljzI32KkMJpEILyMLfA7mc6ST7C3X/5ez1ZwfYrAHsF0inL709j2Jz8lLKN9cHm8BWbxDRcg9lFKuhmX87MLLIlNUiNs18YkgHHF3Ov/J3hK4Kjz7HfuoS/NANIgJ5cSf3l2PQlbdiCPx+M48O8tXnPa/+GsgJcPPg1BAUr7dSBos03Puga+wqvcbysljyEh0F1+Cyu7WQCM48BYj8jHc2Om/ykAjSJsdnvh6/Olt/6eQ/4tfWyEkZZmN18gF0cRkduMklG4rOcq7+1IZThlW1tAPPv8rFNZF5QERcs3V18ZbBT/qDEEgmf4UVgs8oLkF19qKFdFiVutffVJHy4K2GGMHGLnlEepfeKaJ+bwkQCuNRto4WrVIYuuyqcxbQ+iwZlNzpB9wVjJgoMRMKbTna0f49yn3AFRlaX9kg2sX2q+Kiy/mYdUOpUjHlJPtznZhxeGpjsLuQ0rR8AZVfQD3WXoT2MaWIAhr8UaK7gbz98ESwN5qRDYY=
+```
+4. Бейдж со статусом билда [![Build Status](https://travis-ci.com/vitaliygut/ansible-role-db.svg?branch=master)](https://travis-ci.com/vitaliygut/ansible-role-db)

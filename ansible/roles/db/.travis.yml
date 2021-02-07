@@ -1,29 +1,14 @@
----
 language: python
-python: "2.7"
-
-# Use the new container infrastructure
-sudo: false
-
-# Install ansible
-addons:
-  apt:
-    packages:
-    - python-pip
-
+python: '3.6'
+services:
+- docker
 install:
-  # Install ansible
-  - pip install ansible
-
-  # Check ansible version
-  - ansible --version
-
-  # Create ansible.cfg with correct roles_path
-  - printf '[defaults]\nroles_path=../' >ansible.cfg
-
+- pip install ansible>=2.4 molecule>=2.6 pytest-testinfra molecule-docker
 script:
-  # Basic role syntax check
-  - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
-
+- molecule --version
+- ansible --version
+- molecule test
 notifications:
-  webhooks: https://galaxy.ansible.com/api/v1/notifications/
+  email: false
+  slack:
+    secure: foch1tvmT3QLcyNgj47EoTif/JnDtpDUAzNboVCP+sPf/Q2NP+ZNv8Xb61ZxtGcCQTEvf0tzpB2mLr/BCKy4ZsW9c9sPI3TSq95YwonmSW6V8ms0lhdl6jxxk5wD62lzKiv6G4kpaqWhBP5Eb+XgGGoU44jA3VM4RNNYOmcm4TKvgTRO9CqUSwljzI32KkMJpEILyMLfA7mc6ST7C3X/5ez1ZwfYrAHsF0inL709j2Jz8lLKN9cHm8BWbxDRcg9lFKuhmX87MLLIlNUiNs18YkgHHF3Ov/J3hK4Kjz7HfuoS/NANIgJ5cSf3l2PQlbdiCPx+M48O8tXnPa/+GsgJcPPg1BAUr7dSBos03Puga+wqvcbysljyEh0F1+Cyu7WQCM48BYj8jHc2Om/ykAjSJsdnvh6/Olt/6eQ/4tfWyEkZZmN18gF0cRkduMklG4rOcq7+1IZThlW1tAPPv8rFNZF5QERcs3V18ZbBT/qDEEgmf4UVgs8oLkF19qKFdFiVutffVJHy4K2GGMHGLnlEepfeKaJ+bwkQCuNRto4WrVIYuuyqcxbQ+iwZlNzpB9wVjJgoMRMKbTna0f49yn3AFRlaX9kg2sX2q+Kiy/mYdUOpUjHlJPtznZhxeGpjsLuQ0rR8AZVfQD3WXoT2MaWIAhr8UaK7gbz98ESwN5qRDYY=
