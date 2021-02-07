@@ -4,3 +4,4 @@
   src: git@github.com:vitaliygut/ansible-role-db.git
   scm: git
   version: master
+
