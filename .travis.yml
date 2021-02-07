@@ -1,0 +1,14 @@
+---
+language: python
+python: "3.6"
+
+services:
+  - docker
+
+install:
+  - pip install ansible>=2.4 molecule>=2.6 pytest-testinfra molecule-docker
+
+script:
+  - molecule --version
+  - ansible --version
+  - molecule test
